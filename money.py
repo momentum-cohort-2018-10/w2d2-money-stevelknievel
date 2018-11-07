@@ -59,9 +59,9 @@ class Money:
         Use the currency digits to determine number of digits to show.
         """
         if self.currency.symbol is not None:
-            return f"{self.currency.symbol}"
+            return f"{self.currency.symbol}{self.amount:.{self.currency.digits}f}"
         else:
-            return f"{self.currency.code}"
+            return f"{self.currency.code} {self.amount:.{self.currency.digits}f}"
 
     def __repr__(self):
         return f"<Money {str(self)}>"
@@ -81,7 +81,7 @@ class Money:
         if self.currency != other.currency:
             raise DifferentCurrencyError
         else:
-            return self.amount + other.amount
+            return Money(self.amount + other.amount, self.currency)
 
     def sub(self, other):
         """
@@ -91,16 +91,16 @@ class Money:
         if self.currency != other.currency:
             raise DifferentCurrencyError
         else:
-            return self.amount - other.amount
+            return Money(self.amount - other.amount, self.currency)
 
     def mul(self, multiplier):
         """
         Multiply a money object by a number to get a new money object.
         """
-        return self.amount * multiplier
+        return Money(self.amount * multiplier, self.currency)
 
     def div(self, divisor):
         """
         Divide a money object by a number to get a new money object.
         """
-        return self.amount / divisor
+        return Money(self.amount / divisor, self.currency)
